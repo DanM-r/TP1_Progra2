@@ -21,7 +21,7 @@ Binary Tree for storing the flights in HEAP based on how close are to departure.
 ### Class Flight
 Atributes:
 - Model (Airline?)
-- Tripulation (For what?)
+- Tripulation
 - Date & Time
 - From City
 - To City
@@ -32,7 +32,8 @@ Atributes:
 ### Class AirplaneSeats
 ### Class CheckIn
 ### Class Main (Menu)
+### Class Tripulation
 ### Other Possible Classes
-- Tripulation
 - Airline
 - User
+- Interaction or something like that
