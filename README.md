@@ -9,31 +9,61 @@ A system designed to manage the flights of an airline and provide customers and 
 5. Check-in a person to a flight
 6. Memory Management.
 
+## Important Note: How to compile the project?
+
 ### Memory Management
 Consists of two files:
-- active_flights.txt: stores flights with less than 24 hours since last modification.
-- inactive_flights.txt: stores flights with more than 24 hours since last modification.
-> System initially loads data from active_flights.txt. When there's a modification, the system will upload the changes to the active_flights.txt. When the system updates, the system will store the flights that meets the criteria and delete from HEAP. **Format**:
-
-### Class Collection & Node
-Binary Tree for storing the flights in HEAP based on how close are to departure. Node is a private nested class to Collection.
+- active\_flights.txt: stores flights with less than 24 hours since last modification.
+- inactive\_flights.txt: stores flights with more than 24 hours since last modification.
+> System initially loads data from active\_flights.txt. When there's a modification, the system will upload the changes to the active\_flights.txt. When the system updates, the system will store the flights that meets the criteria and delete from HEAP. **Format**:
 
 ### Class Flight
-Atributes:
-- Model (Airline?)
-- Tripulation
-- Date & Time
-- From City
-- To City
-- Duration
-- Seats (Ocupado, Disponible)
-- Estado (Programado, Retrasado, Cancelado, Partió, Aterrizó)
+**Atributes**:
+- id (char array): will consists of 5 digits from 0 to z, letters in lowercase. As it needs a termination symbol, the size of this array is 6.
+- Model (char array)
+- Aircrew: (char* array [pilot, copilot, attendant1, attendant2, attendant3]) remember it is a char array of pointers to char arrays in HEap.
+- Date & Time (std::ctime)
+- From City (char array) 
+- To City (char array)
+- Duration (int)
+- Seats (Class AirplaneSeats)
+- State: consists on a char array of two characters plus termination symbol.
+    - (SC) Scheduled: no passengers yet
+    - (OT) On time: confirmed
+    - (LT) Late: s.e.
+    - (ER) Early: s.e.
+    - (CL) Canceled: s.e.
+    - (LN) Landed: s.e.
+**Methods**
+- printLess()
+- printFull()
+- setters & getters
+- showSeats
 
 ### Class AirplaneSeats
-### Class CheckIn
-### Class Main (Menu)
-### Class Tripulation
+**Atributes**
+- seats (bool\*) Changes based upon the plane technical specifications when creating a new flight
+**Methods**
+- assign(int)
+- print()
+- capacity()
+- doFitsMinRequirements()
+- doFitsInPlane(int)
+
+### Class Menu
+**Atributes**
+- Collection
+
+**Methods**
+- Print all flights from collection
+- Request information about a flight
+- Modify a flight
+- Verify seats of a flight
+- Check-In a flight
+- StoreData
+- ReadData
+
 ### Other Possible Classes
 - Airline
 - User
-- Interaction or something like that
+- State
