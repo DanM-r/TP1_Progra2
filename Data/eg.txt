@@ -1,0 +1,5 @@
+1
+JH867 Boeing-737 Delhi London Fri Jan 27 13:00:00 2023 8 Scheduled 6x10
+1 0 0 0 0 1 0 0 0 1
+1 1 0 1 0 1 0 0 1 1
+0 0 0 1 0 0 1 1 1 0

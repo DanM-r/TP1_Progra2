@@ -2,16 +2,19 @@
 #define FLIGHT_H
     // ===> Libraries <===
     #include <ctime>
+    #include <cstring>
     #include <iostream>
     #include <iomanip>
 
     // ===> Files <===
-    #include "AirplaneSeats.h"
 
     // ===> Using From Libraries <===
     using std::tm;
     using std::cout;
-    using std::setw;
+    using std::endl;
+    using std::flush;
+    using std::mktime;
+    using std::asctime;
 
     class Flight {
         /*
@@ -25,7 +28,7 @@
         char state[10];
         tm dateTime;
         int time;
-        AirplaneSeats seats;
+        bool** seats;
 
         /*
             ===> Private Methods <===
@@ -36,7 +39,7 @@
             ==> Public Methods <===
         */
         public:
-            Flight(char*, char*, char*, char*, tm);
+            Flight(char*, char*, char*, char*, tm, int, char*, bool**);
             ~Flight();
             void printLess();
             void printFull();
