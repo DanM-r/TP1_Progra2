@@ -32,8 +32,10 @@
             ===> Private Methods <===
         */
         void printAll();
-        bool fnd();
-        bool mod();
+        int fnd(char*);
+        bool rqst(char*);
+        bool mod(char*);
+        bool checkSeats(char*);
         void checkIn();
         void readData();
         void saveData();

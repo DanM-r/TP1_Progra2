@@ -2,7 +2,10 @@
 
 Menu::Menu() {
     this->readData();
+
     int option;
+    char id[6];
+
     cout << "===>> Flight Management and Search System <<===" << endl;
     cout << "0: Show active flights" << endl;
     cout << "1: Inspect an active flight"<< endl;
@@ -11,7 +14,7 @@ Menu::Menu() {
     cout << "4: Check-in a flight"<< endl;
     cout << "5: Save Data"<< endl;
     cout << "6: Exit System"<< endl;
-    cout << "> Select an option: " << endl;
+    cout << "> Select an option: " << flush;
     cin >> option;
 
     switch (option) {
@@ -21,15 +24,25 @@ Menu::Menu() {
             break;
         case 1:
             // ==> Request info a flight
+            cout << "> Enter id of the flight: " << flush;
+            cin >> id;
+            this->rqst(id);
             break;
         case 2:
             // ==> Modify a flight
+            cout << "> Enter id of the flight: " << flush;
+            cin >> id;
+            this->mod(id);
             break;
         case 3:
             // ==> Verify Seats of a flight
+            cout << "> Enter id of the flight: " << flush;
+            cin >> id;
+            this->checkSeats(id);
             break;
         case 4:
             // ==> Check in a person to a flight
+            this->checkIn();
             break;
         case 5:
             // ==> Save Data
@@ -38,7 +51,7 @@ Menu::Menu() {
             // ==> Exit
             break;
         default:
-            cout << "> ERROR: that option is not allowed." << endl;
+            cerr << "> ERROR: that option is not allowed." << endl;
     }
 }
 
@@ -61,21 +74,22 @@ void Menu::readData() {
         this->list = new Flight*[this->num_flights];
 
         tm dateTime;
-        char line_str[100];
+        char line_str[150];
         char seats_str[100];
         char* tok = nullptr;
-        char* info[14];
+        char* info[19];
+        char* aircrew[5];
         bool** seats = nullptr;
 
-        fileRead.ignore(100,'\n');
+        fileRead.ignore(150,'\n');
         for (int i = 0; i < this->num_flights; i++) {
             if (fileRead.eof()) {
                 break;
             } else {
-                fileRead.getline(line_str, 100);
+                fileRead.getline(line_str, 150);
                 tok = strtok(line_str, " ");
 
-                for (int j = 0; j < 14; j++) {
+                for (int j = 0; j < 19; j++) {
                     if (tok != nullptr) {
                         info[j] = tok;
                         tok = strtok(nullptr, " ");
@@ -91,14 +105,17 @@ void Menu::readData() {
                 dateTime.tm_min = atoi(info[8]);
                 dateTime.tm_sec = atoi(info[9]);
                 
+                for (int j = 0; j < 5; j++) {
+                    aircrew[j] = info[j + 9];
+                }
                 
-                seats = new bool*[atoi(info[12])];
-                for (int j = 0; j < atoi(info[12]); j++) {
-                    seats[j] = new bool[atoi(info[13])];
+                seats = new bool*[atoi(info[17])];
+                for (int j = 0; j < atoi(info[17]); j++) {
+                    seats[j] = new bool[atoi(info[18])];
                     fileRead.ignore(100,'\n');
                     fileRead.getline(seats_str, 100);
                     tok = strtok(seats_str, " ");
-                    for (int k = 0; k < atoi(info[13]); k++) {
+                    for (int k = 0; k < atoi(info[18]); k++) {
                         if (tok != nullptr) {
                             seats[j][k] = tok;
                             tok = strtok(nullptr, " ");
@@ -109,7 +126,7 @@ void Menu::readData() {
                 }
                 
                 
-                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, atoi(info[10]), info[11], seats);
+                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, aircrew, atoi(info[10]), info[11], seats);
                 seats = nullptr;
             }
         }
@@ -119,7 +136,10 @@ void Menu::readData() {
 }
 
 void Menu::saveData() {
+    ofstream writeActiveFlights("../Data/active_flights.txt");
+    ofstream writeInactiveFlights("../Data/inactive_flights.txt");
 
+    
 }
 
 void Menu::printAll() {
@@ -129,12 +149,49 @@ void Menu::printAll() {
     }
 }
 
-bool Menu::fnd() {
-    return false;
+int Menu::fnd(char* id) {
+    if (this->list == nullptr) {
+        return -1;
+    } else {
+        int index = -1;
+        for (int i = 0; i < this->num_flights; i++) {
+            if (this->list[i]->getId() == id) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 }
 
-bool Menu::mod() {
-    return false;
+bool Menu::rqst(char* id) {
+    int index = this->fnd(id);
+    if (index == -1) {
+        return false;
+    } else {
+        this->list[index]->printFull();
+        return true;
+    }
+}
+
+bool Menu::mod(char* id) {
+    int index = this->fnd(id);
+    if (index == -1) {
+        return false;
+    } else {
+        this->list[index]->mod();
+        return true;
+    }
+}
+
+bool Menu::checkSeats(char* id) {
+    int index = this->fnd(id);
+    if (index == -1) {
+        return false;
+    } else {
+        this->list[index]->printSeats();
+        return true;
+    }
 }
 
 void Menu::checkIn() {

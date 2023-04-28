@@ -22,7 +22,7 @@
         */
         char id[6];
         char model[50];
-        char* aircrew[6];
+        char* aircrew[5];
         char from[50];
         char to[50];
         char state[10];
@@ -39,10 +39,12 @@
             ==> Public Methods <===
         */
         public:
-            Flight(char*, char*, char*, char*, tm, int, char*, bool**);
+            Flight(char*, char*, char*, char*, tm, char*, int, char*, bool**);
             ~Flight();
             void printLess();
             void printFull();
             void printSeats();
+            void mod();
+            char* getId();
     };
 #endif

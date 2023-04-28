@@ -1,11 +1,12 @@
 #include "..\Headers\Flight.h"
 
-Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, int time, char* state, bool** seats) {
+Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* aircrew, int time, char* state, bool** seats) {
     strcpy(this->id, id);
     strcpy(this->model, model);
     strcpy(this->from, from);
     strcpy(this->to, to);
     strcpy(this->state, state);
+    this->aircrew = aircrew;
     this->dateTime = dateTime;
     this->time = time;
     this->seats = seats;
@@ -25,5 +26,13 @@ void Flight::printFull() {
 }
 
 void Flight::printSeats() {
+    
+}
+
+void Flight::getId() {
+    return this->id;
+}
+
+void Flight::mod() {
     
 }
