@@ -3,56 +3,58 @@
 Menu::Menu() {
     this->readData();
 
-    int option;
+    int option = 1;
     char id[6];
 
-    cout << "===>> Flight Management and Search System <<===" << endl;
-    cout << "0: Show active flights" << endl;
-    cout << "1: Inspect an active flight"<< endl;
-    cout << "2: Modify an active flight"<< endl;
-    cout << "3: Inspect available seats in a flight"<< endl;
-    cout << "4: Check-in a flight"<< endl;
-    cout << "5: Save Data"<< endl;
-    cout << "6: Exit System"<< endl;
-    cout << "> Select an option: " << flush;
-    cin >> option;
+    do {
+        cout << "===>> Flight Management and Search System <<===" << endl;
+        cout << "0: Show active flights" << endl;
+        cout << "1: Inspect an active flight"<< endl;
+        cout << "2: Modify an active flight"<< endl;
+        cout << "3: Inspect available seats in a flight"<< endl;
+        cout << "4: Check-in a flight"<< endl;
+        cout << "5: Save Data"<< endl;
+        cout << "6: Exit System"<< endl;
+        cout << "> Select an option: " << endl;
+        std::cin >> option;
 
-    switch (option) {
-        case 0:
-            // ==> Print all Flights
-            printAll();
-            break;
-        case 1:
-            // ==> Request info a flight
-            cout << "> Enter id of the flight: " << flush;
-            cin >> id;
-            this->rqst(id);
-            break;
-        case 2:
-            // ==> Modify a flight
-            cout << "> Enter id of the flight: " << flush;
-            cin >> id;
-            this->mod(id);
-            break;
-        case 3:
-            // ==> Verify Seats of a flight
-            cout << "> Enter id of the flight: " << flush;
-            cin >> id;
-            this->checkSeats(id);
-            break;
-        case 4:
-            // ==> Check in a person to a flight
-            this->checkIn();
-            break;
-        case 5:
-            // ==> Save Data
-            break;
-        case 6:
-            // ==> Exit
-            break;
-        default:
-            cerr << "> ERROR: that option is not allowed." << endl;
-    }
+        switch (option) {
+            case 0:
+                // ==> Print all Flights
+                printAll();
+                break;
+            case 1:
+                // ==> Request info a flight
+                cout << "> Enter id of the flight: " << flush;
+                cin >> id;
+                this->rqst(id);
+                break;
+            case 2:
+                // ==> Modify a flight
+                cout << "> Enter id of the flight: " << flush;
+                cin >> id;
+                this->mod(id);
+                break;
+            case 3:
+                // ==> Verify Seats of a flight
+                cout << "> Enter id of the flight: " << flush;
+                cin >> id;
+                this->checkSeats(id);
+                break;
+            case 4:
+                // ==> Check in a person to a flight
+                this->checkIn();
+                break;
+            case 5:
+                // ==> Save Data
+                break;
+            case 6:
+                // ==> Exit
+                break;
+            default:
+                cerr << "> ERROR: that option is not allowed." << endl;
+        }
+    } while(option != 6);
 }
 
 Menu::~Menu() {
@@ -78,7 +80,6 @@ void Menu::readData() {
         char seats_str[100];
         char* tok = nullptr;
         char* info[19];
-        char* aircrew[5];
         bool** seats = nullptr;
 
         fileRead.ignore(150,'\n');
@@ -105,10 +106,6 @@ void Menu::readData() {
                 dateTime.tm_min = atoi(info[8]);
                 dateTime.tm_sec = atoi(info[9]);
                 
-                for (int j = 0; j < 5; j++) {
-                    aircrew[j] = info[j + 9];
-                }
-                
                 seats = new bool*[atoi(info[17])];
                 for (int j = 0; j < atoi(info[17]); j++) {
                     seats[j] = new bool[atoi(info[18])];
@@ -124,10 +121,8 @@ void Menu::readData() {
                         }
                     }
                 }
-                
-                
-                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, aircrew, atoi(info[10]), info[11], seats);
-                seats = nullptr;
+    
+                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, info[10], info[11], info[12], info[13], info[14], atoi(info[15]), info[16], seats);
             }
         }
     }
@@ -143,7 +138,8 @@ void Menu::saveData() {
 }
 
 void Menu::printAll() {
-    cout << "ID     Model     From    To   Date / Time  State"  << endl;
+    cout << left;
+    cout << "\n\n" << setw(10) << "ID" << setw(20) << "Model" << setw(20) << "From" << setw(20) << "To" << setw(20) << "Date/time" << setw(20) << "State" << endl;
     for (int i = 0; i < this->num_flights; i++) {
         this->list[i]->printLess();
     }
@@ -155,7 +151,16 @@ int Menu::fnd(char* id) {
     } else {
         int index = -1;
         for (int i = 0; i < this->num_flights; i++) {
-            if (this->list[i]->getId() == id) {
+            char* selected_id = this->list[i]->getId();
+            bool areEqual = true;
+            for (int j = 0; j < 6; j++) {
+                if (id[j] != selected_id[j]) {
+                    areEqual = false;
+                    break;
+                }
+            }
+            
+            if (areEqual) {
                 index = i;
                 break;
             }
@@ -167,6 +172,7 @@ int Menu::fnd(char* id) {
 bool Menu::rqst(char* id) {
     int index = this->fnd(id);
     if (index == -1) {
+        cout << "> Flight cannot be located" << endl;
         return false;
     } else {
         this->list[index]->printFull();
@@ -177,6 +183,7 @@ bool Menu::rqst(char* id) {
 bool Menu::mod(char* id) {
     int index = this->fnd(id);
     if (index == -1) {
+        cout << "> Flight cannot be located" << endl;
         return false;
     } else {
         this->list[index]->mod();
@@ -187,6 +194,7 @@ bool Menu::mod(char* id) {
 bool Menu::checkSeats(char* id) {
     int index = this->fnd(id);
     if (index == -1) {
+        cout << "> Flight cannot be located" << endl;
         return false;
     } else {
         this->list[index]->printSeats();

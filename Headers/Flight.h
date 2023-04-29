@@ -13,8 +13,10 @@
     using std::cout;
     using std::endl;
     using std::flush;
+    using std::setw;
+    using std::setfill;
     using std::mktime;
-    using std::asctime;
+    using std::strftime;
 
     class Flight {
         /*
@@ -39,7 +41,7 @@
             ==> Public Methods <===
         */
         public:
-            Flight(char*, char*, char*, char*, tm, char*, int, char*, bool**);
+            Flight(char*, char*, char*, char*, tm, char*, char*, char*, char*, char*, int, char*, bool**);
             ~Flight();
             void printLess();
             void printFull();

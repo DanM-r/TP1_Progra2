@@ -5,6 +5,7 @@
     #include <cstring>
     #include <ctime>
     #include <iostream>
+    #include <iomanip>
 
     // ===> Files <===
     #include "Flight.h"
@@ -18,6 +19,9 @@
     using std::cin;
     using std::endl;
     using std::flush;
+    using std::left;
+    using std::setfill;
+    using std::setw;
     using std::tm;
     using std::strtok; 
 
@@ -40,6 +44,7 @@
         void readData();
         void saveData();
         bool atool(char*);
+        void copy(char*, char*);
 
         /*
             ==> Public Methods <===
