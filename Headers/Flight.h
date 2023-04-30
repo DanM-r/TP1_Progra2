@@ -48,5 +48,6 @@
             void printSeats();
             void mod();
             char* getId();
+            tm getDateTime();
     };
 #endif

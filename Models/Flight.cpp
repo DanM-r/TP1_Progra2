@@ -1,4 +1,4 @@
-#include "..\Headers\Flight.h"
+#include "../Headers/Flight.h"
 
 Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* pilot, char* copilot, char* attend1, char* attend2, char* attend3, int time, char* state, bool** seats) {
     strcpy(this->id, id);
@@ -59,4 +59,8 @@ char* Flight::getId() {
 
 void Flight::mod() {
     
+}
+
+tm Flight::getDateTime() {
+    return dateTime;
 }
