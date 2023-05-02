@@ -13,7 +13,6 @@ using std::cin;
 
 /* >>> Function headers <<< */
 void tests();
-char** vvfv();
 
 int main() {
     /* std::tm dateTime{};
@@ -30,22 +29,5 @@ int main() {
 
 /* >>> Functions <<< */
 void tests() {
-    int p;
-    char* n [5];
-    char** x = vvfv();
-    for (int i = 0; i < 5; i++) {
-        n[i] = x[i];
-    }
-    cout << "test 1";
-    cout << "test 2" << endl;
-    cin >> p;
-}
-
-char** vvfv() {
-    char* l = new char[] {"Ja"};
-    char** z = new char*[5];
-    for (int i = 0; i < 5; i++) {
-        z[i] = l;
-    }
-    return z;
+    
 }

@@ -40,11 +40,10 @@
         bool rqst(char*);
         bool mod(char*);
         bool checkSeats(char*);
-        void checkIn();
+        bool checkIn(char*);
         void readData();
         void saveData();
         bool atool(char*);
-        void copy(char*, char*);
 
         /*
             ==> Public Methods <===

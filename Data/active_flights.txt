@@ -1,6 +1,11 @@
-1
+2
 JH467 Boeing-737 Delhi London 01 27 2023 13 00 00 Daniel Javier Ana Melissa Christopher 8 Scheduled 4 10
 1 0 0 0 0 1 0 0 0 1
 1 1 0 1 0 1 0 0 1 1
 0 0 0 1 0 0 1 1 1 0
 1 1 0 1 0 1 0 0 1 1
+DM160 Boeing-737 Paris Singapore 02 05 2023 16 30 00 Daniel Sebastian Kevin Mauricio Natalia 9 Scheduled 4 10
+0 1 1 0 0 1 0 0 0 0
+0 1 1 0 0 1 0 0 0 0
+0 1 0 0 0 0 0 0 0 0
+1 1 0 1 0 1 0 1 0 0
