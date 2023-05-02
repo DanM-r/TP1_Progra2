@@ -7,6 +7,7 @@ Menu::Menu() {
     char id[6];
 
     do {
+        cout << endl;
         cout << "===>> Flight Management and Search System <<===" << endl;
         cout << "0: Show active flights" << endl;
         cout << "1: Inspect an active flight"<< endl;
@@ -16,7 +17,8 @@ Menu::Menu() {
         cout << "5: Save Data"<< endl;
         cout << "6: Exit System"<< endl;
         cout << "> Select an option: " << endl;
-        std::cin >> option;
+        cin >> option;
+        cout << endl;
 
         switch (option) {
             case 0:

@@ -15,15 +15,6 @@ using std::cin;
 void tests();
 
 int main() {
-    /* std::tm dateTime{};
-    dateTime.tm_year = 2023-1900;
-    dateTime.tm_mday = 27;
-    dateTime.tm_hour = 13;
-    std::mktime(&dateTime);
-    char output[100];
-    std::strftime(output, sizeof(dateTime), "%m %d %Y %H %M %S", &dateTime);
-    cout << output; */
-    //tests();
     Menu menu = Menu();
 }
 

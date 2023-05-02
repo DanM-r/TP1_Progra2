@@ -1,4 +1,4 @@
-#include "..\Headers\Flight.h"
+#include "../Headers/Flight.h"
 
 Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* pilot, char* copilot, char* attend1, char* attend2, char* attend3, int duration, char* state, bool** seats, int rows, int collumns) {
     strcpy(this->id, id);
