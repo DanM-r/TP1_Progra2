@@ -7,6 +7,7 @@
     #include <iomanip>
 
     // ===> Files <===
+    #include "../Headers/PlaneSeats.h"
 
     // ===> Using From Libraries <===
     using std::tm;
@@ -36,9 +37,7 @@
         char state[10];
         tm dateTime;
         int duration;
-        int rows;
-        int collumns;
-        bool** seats;
+        PlaneSeats* seats;
 
         /*
             ===> Private Methods <===
@@ -53,10 +52,8 @@
             ~Flight();
             void printLess();
             void printFull();
-            void printSeats();
             bool isInactive();
             void mod();
-            void reserveSeats();
             char* getId();
             char* getModel();
             char* getFrom();
@@ -65,9 +62,6 @@
             char* getAircrew();
             int getDuration();
             char* getState();
-            int getRows();
-            int getCollumns();
-            bool** getSeats();
             void setDateTime(char*);
             void setAircrew(char*, int);
     };
