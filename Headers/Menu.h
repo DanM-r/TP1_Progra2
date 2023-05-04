@@ -9,6 +9,8 @@
 
     // ===> Files <===
     #include "Flight.h"
+    #include "PlaneSeats.h"
+    #include "User.h"
 
     // ===> Using From Libraries <===
     using std::ofstream;
@@ -44,6 +46,7 @@
         void readData();
         void saveData();
         bool atool(char*);
+        void cleanList();
 
         /*
             ==> Public Methods <===

@@ -45,8 +45,9 @@
             void printSeats();
             void reserveSeats(char* name);
             int getRows();
-            int geetCollumns();
+            int getCollumns();
             bool** getSeats();
             User** getUsers();
+            bool isEmpty();
     };
 #endif

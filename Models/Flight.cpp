@@ -1,6 +1,6 @@
 #include "../Headers/Flight.h"
 
-Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* pilot, char* copilot, char* attend1, char* attend2, char* attend3, int duration, char* state, bool** seats, int rows, int collumns) {
+Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* pilot, char* copilot, char* attend1, char* attend2, char* attend3, int hours, char* state, bool** seats, int rows, int collumns, User** users) {
     strcpy(this->id, id);
     strcpy(this->model, model);
     strcpy(this->from, from);
@@ -17,47 +17,60 @@ Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* p
     aircrew[4] = new char[sizeof(attend3)/sizeof(attend3[4])];
     strcpy(this->aircrew[4], attend3);
     this->dateTime = dateTime;
-    this->duration = duration;
-    this->seats = new PlaneSeats(rows, collumns, seats, nullptr);
+    this->hours = hours;
+    this->seats = new PlaneSeats(rows, collumns, seats, users);
 }
 
 Flight::~Flight() {
     for (int i = 0; i < 5; i++) {
         delete aircrew[i];
     }
+    delete seats;
 }
 
 void Flight::printLess() {
     char output[16];
     mktime(&dateTime);
     strftime(output, sizeof(this->dateTime), "%m/%d/%Y %H:%M", &this->dateTime);
-    cout << setfill('-');
-    cout << setw(10) << this->id << setw(20) << this->model << setw(20) << this->from << setw(20) << this->to << setw(20) << output << setw(20) << this->state << endl;
+    cout << setw(1) << "| " << setw(10) << this->id << setw(1) << "| " << setw(20) << this->model << setw(1) << "| " << setw(20) << this->from << setw(1) << "| " << setw(20) << this->to << setw(1) << "| " << setw(20) << output << setw(1) << "| " << setw(20) << this->state << setw(1) << "|" << endl;
 }
 
 void Flight::printFull() {
-    char output[16];
-    mktime(&dateTime);
-    strftime(output, sizeof(this->dateTime), "%m/%d/%Y %H:%M", &this->dateTime);
+    char dateTime[16];
+    mktime(&this->dateTime);
+    strftime(dateTime, sizeof(this->dateTime), "%m/%d/%Y %H:%M", &this->dateTime);
+
     cout << setfill('-');
-    cout << "+" << setw(90) << "+" << endl;
+    cout << setw(1) << "+" << setw(35) << "-" << setw(1) << "+" << endl;
     cout << setfill(' ');
-    cout << "|" << setw(5) << "ID: " << setw(20) << this->id << setw(10) << "Model: " << setw(20) << this->model << setw(10) << "State: " << setw(20) << this->state << "|" << endl;
-    cout << "|" << setw(10) << "From: " << setw(20) << this->from << setw(10) << "To: " << setw(20) << this->to << setw(10) << "At: " << setw(20) << output << "|" << endl;
-    cout << "|" << setw(10) << "Time: " << setw(20) << this->duration << setw(10) << "Pilot: " << setw(20) << this->aircrew[0] << setw(10) << "Copilot: " << setw(20) << this->aircrew[1] << "|" << endl;
-    cout << "|" << setw(20) << "Flight Attendants: " << setw(20) << this->aircrew[2] << setw(20) << this->aircrew[3] << setw(20) << this->aircrew[4] << "|" << endl;
+    cout << setw(2) << "| " << setw(15) << "ID: " << setw(19) << this->id << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "Model: " << setw(19) << this->model << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "State: " << setw(19) << this->state << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "From: " << setw(19) << this->from << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "To: " << setw(19) << this->to << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "At: " << setw(19) << dateTime << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "Hours on air: " << setw(19) << this->hours << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "Pilot: " << setw(19) << this->aircrew[0] << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "Copilot: " << setw(19) << this->aircrew[1] << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(15) << "Attendants: " << setw(19) << " " << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(3) << " - " << setw(31) << this->aircrew[2] << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(3) << " - " << setw(31) << this->aircrew[3] << setw(2) << "| " << endl;
+    cout << setw(2) << "| " << setw(3) << " - " << setw(31) << this->aircrew[4] << setw(2) << "| " << endl;
     cout << setfill('-');
-    cout << "+" << setw(90) << "+" << endl;
+    cout << setw(1) << "+" << setw(35) << "-" << setw(1) << "+" << endl;
 }
 
 bool Flight::isInactive() {
     time_t current_time = time(nullptr);
     time_t flight_time = mktime(&this->dateTime);
+    if (  current_time  >  flight_time  and  difftime(current_time, flight_time)  >  86400  ) {
 
-    if (difftime(current_time, flight_time) <= 86400) {
         return true;
+
     } else {
+
         return false;
+
     }
 }
 
@@ -78,16 +91,13 @@ char* Flight::getTo() {
     return this->to;
 }
 
-char* Flight::getDateTime() {
-    char output[100];
-    mktime(&dateTime);
-    strftime(output, sizeof(dateTime), "%m %d %Y %H %M %S", &dateTime);
-    return output;
+void Flight::getDateTime(char* dateTime) {
+    mktime(&this->dateTime);
+    strftime(dateTime, sizeof(this->dateTime), "%m %d %Y %H %M %S", &this->dateTime);
 }
 
-char* Flight::getAircrew() {
-    char aircrew[100];
-    strcat(aircrew, this->aircrew[0]);
+void Flight::getAircrew(char* aircrew) {
+    strcpy(aircrew, this->aircrew[0]);
     strcat(aircrew, " ");
     strcat(aircrew, this->aircrew[1]);
     strcat(aircrew, " ");
@@ -96,11 +106,10 @@ char* Flight::getAircrew() {
     strcat(aircrew, this->aircrew[3]);
     strcat(aircrew, " ");
     strcat(aircrew, this->aircrew[4]);
-    return aircrew;
 }
 
-int Flight::getDuration() {
-    return this->duration;
+int Flight::getHours() {
+    return this->hours;
 }
 
 char* Flight::getState() {
@@ -108,40 +117,53 @@ char* Flight::getState() {
 }
 
 void Flight::mod() {
+
     char new_data[50];
     int option;
-    cout << "> What do you want to modify?" << endl;
-    cout << "1. State" << endl;
-    cout << "2. Model" << endl;
-    cout << "3. Date/Time" << endl;
-    cout << "4. Aircrew" << endl;
+
+    cout << setfill('-');
+    cout << setw(1) << "+" << setw(50) << "-" << setw(1) << "+" << endl;
+    cout << setfill(' ');
+    cout << setw(1) << "| " << setw(25) << "                Modifing" << setw(24) << this->id << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(49) << "1. State" << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(49) << "2. Time" << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(49) << "3. Pilot" << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(49) << "4. Copilot" << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(15) << "5. Attendant " << setw(34) << this->aircrew[2] << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(15) << "6. Attendant " << setw(34) << this->aircrew[3] << setw(1) << "|" << endl;
+    cout << setw(1) << "| " << setw(15) << "7. Attendant " << setw(34) << this->aircrew[4] << setw(1) << "|" << endl;
+    cout << setfill('-');
+    cout << setw(1) << "+" << setw(50) << "-" << setw(1) << "+" << endl;
+    cout << "> Select an option: " << flush;
     cin >> option;
     switch (option) {
         case 1:
-            cout << "> Enter the new state of the flight: " << flush;
+            cout << "> Current state is: " << this->state << ". Enter the new state of the flight: " << flush;
             cin >> new_data;
-            strcpy(this->state, new_data);
-            break;
+            this->setState(new_data);
+            break;;
         case 2:
-            cout << "> Enter the new model of the plane of the flight: " << flush;
-            cin >> new_data;
-            strcpy(this->model, new_data);
-            break;
-        case 3:
-            cout << "> Enter the new date/time (use format MM/DD/YYYY HH:MM:SS): " << flush;
+            char current_dateTime[16];
+            mktime(&this->dateTime);
+            strftime(current_dateTime, sizeof(this->dateTime), "%m/%d/%Y %H:%M", &this->dateTime);
+            cout << "> Current date/time is: " << current_dateTime << ". Enter the new time (use format HH:MM): " << flush;
             cin >> new_data;
             this->setDateTime(new_data);
             break;
+        case 3:
+            strcpy(aircrew[0], new_data);
+            break;
         case 4:
-            int opt;
-            cout << "1. Pilot" << endl;
-            cout << "2. Copilot" << endl;
-            cout << "3. Attendants" << endl;
-            cout << "> Enter which option you want to modify: " << flush;
-            cin >> opt;
-            cout << "> Enter the name of the new aircrew member: " << flush;
-            cin >> new_data;
-            this->setAircrew(new_data, opt);
+            strcpy(aircrew[1], new_data);
+            break;
+        case 5:
+            strcpy(aircrew[2], new_data);
+            break;
+        case 6:
+            strcpy(aircrew[3], new_data);
+            break;
+        case 7:
+            strcpy(aircrew[4], new_data);
             break;
         default:
             cerr << "> ERROR: that option is not allowed." << endl;
@@ -150,41 +172,82 @@ void Flight::mod() {
 }
 
 void Flight::setDateTime(char* newDateTime) {
-    int dateTime[6];
+
+    tm new_dateTime;
+    int dateTime[2];
     char* tok = nullptr;
-    tok = strtok(newDateTime, " /:");
-    for (int i = 0; i < 6; i++) {
+    tok = strtok(newDateTime, ":");
+
+    for (int i = 0; i < 2; i++) {
+
         if (tok != nullptr) {
+
             dateTime[i] = atoi(tok);
-            tok = strtok(nullptr, " /:");
+            tok = strtok(nullptr, ":");
         }
     }
-    this->dateTime.tm_mon = dateTime[0];
-    this->dateTime.tm_mday = dateTime[1];
-    this->dateTime.tm_year = dateTime[3] - 1900;
-    this->dateTime.tm_sec = dateTime[5] + dateTime[4]*60 + dateTime[3]*3600;
+
+    new_dateTime.tm_hour = dateTime[0];
+    new_dateTime.tm_min = dateTime[1];
+
+    if (  (this->dateTime.tm_hour*60 + this->dateTime.tm_min)  >  (new_dateTime.tm_hour*60 + new_dateTime.tm_min)  ) {
+
+        cerr << "> ERROR: cannot assign a time earlier than the set original value" << endl;
+
+    } else if (  (strcmp(this->state, "Landed\0\0\0") == 0)  ||  (strcmp(this->state, "Canceled\0") == 0)  ) {
+
+        cerr << "> ERROR: cannot assign a time when the flight state is Canceled or Landed" << endl;
+
+    } else {
+
+        this->dateTime.tm_hour = new_dateTime.tm_hour;
+        this->dateTime.tm_min = new_dateTime.tm_min;
+        cout << "> Date/Time changed succesfully" << endl;
+    }
 }
 
 void Flight::setAircrew(char* newAircrew, int opt) {
     int num_attendant;
     switch(opt) {
-        case 0:
-            this->aircrew[0] = newAircrew;
-            break;
-        case 1:
-            this->aircrew[1] = newAircrew;
-            break;
-        case 2:
-            cout << "1. " << this->aircrew[2] << endl;
-            cout << "2. " << this->aircrew[3] << endl;
-            cout << "3. " << this->aircrew[4] << endl;
-            cout << "> Which flight attendant needs to be replaced, select an option: " << endl;
-            cin >> num_attendant;
-            if (num_attendant < 4) {
-                this->aircrew[num_attendant - 1] = newAircrew;
-            } else {
-                cout << "> ERROR: that option is not allowed" << endl;
-            }
-            break;
+
+        default:
+            cerr << "ERROR: that option is not allowed" << endl;
     }
+}
+
+void Flight::setState(char* new_state) {
+
+    if (  strcmp(this->state, "Landed\0\0\0") == 0  ) {
+
+        cerr << "> ERROR: a landed flight cannot be set up to any other state" << endl;
+
+    } else if (  strcmp(this->state, "Canceled\0") == 0  ) {
+
+        cerr << "> ERROR: a canceled flight cannot be set up to any other state" << endl;
+
+    } else if (  strcmp(this->state, "Onair\0\0\0\0") == 0 && !(strcmp(new_state, "Landed") == 0) ) {
+
+        cerr << "> ERROR: a flight on air cannot be set up to any other state that's not landed" << endl;
+    
+    } else if (  (strcmp(new_state, "Late\0\0\0\0") == 0) && (strcmp(this->state, "Early\0\0\0\0") == 0) || (strcmp(this->state, "Early\0\0\0\0") == 0) && (strcmp(this->state, "Late\0\0\0\0") == 0)  ) {
+
+        cerr << "> ERROR: a late/early flight cannot be set up to their opposite" << endl;
+    
+    } else {
+
+        if (  (strcmp(new_state, "Scheduled") == 0) || (strcmp(new_state, "Ontime\0\0\0") == 0) || (strcmp(new_state, "Early\0\0\0\0") == 0) || (strcmp(new_state, "Late\0\0\0\0\0") == 0) || (strcmp(new_state, "Canceled\0") == 0) || (strcmp(new_state, "Landed\0\0\0") == 0) || (strcmp(new_state, "Onair\0\0\0\0") == 0)  ) {
+
+            strcpy(this->state, new_state);
+            cout << "> State changed succesfully" << endl;
+
+        } else {
+
+            cerr << "> ERROR: invalid state" << endl;
+
+        }
+    }
+}
+
+PlaneSeats* Flight::getSeats() {
+    return this->seats;
 }

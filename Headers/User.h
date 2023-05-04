@@ -19,13 +19,14 @@
     using std::setfill;
     using std::setw;
     using std::tm;
-    using std::strtok; 
+    using std::strtok;
+    using std::strcpy;
 
     class User {
         /*
             ===> Atributes <===
         */
-        char name[20];
+        char name[50];
         char seat[3];
 
         /*

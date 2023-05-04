@@ -1,11 +1,27 @@
-2
-JH467 Boeing-737 Delhi London 01 27 2023 13 00 00 Daniel Javier Ana Melissa Christopher 8 Scheduled 4 10
+4
+JH467 Boeing-737 Delhi London 09 27 2023 13 00 00 Daniel Javier Ana Melissa Christopher 8 Scheduled 4 10
 1 0 0 0 0 1 0 0 0 1
-1 1 0 1 0 1 0 0 1 1
-0 0 0 1 0 0 1 1 1 0
-1 1 0 1 0 1 0 0 1 1
-DM160 Boeing-737 Paris Singapore 02 05 2023 16 30 00 Daniel Sebastian Kevin Mauricio Natalia 9 Scheduled 4 10
-0 1 1 0 0 1 0 0 0 0
-0 1 1 0 0 1 0 0 0 0
-0 1 0 0 0 0 0 0 0 0
-1 1 0 1 0 1 0 1 0 0
+1 0 0 0 0 1 0 0 0 0
+0 0 1 0 0 0 0 0 0 0
+0 0 1 0 0 1 0 0 0 0
+John-1A Steve-1F Steve-1J Steve-2A Daniel-2J Sebastian-3C Kevin-4C Aden-4J
+DM160 Boeing-737 Paris Singapore 02 05 2023 16 30 00 Daniel Sebastian Kevin Mauricio Natalia 9 Landed 4 10
+1 0 0 0 0 1 0 0 0 1
+1 0 0 0 0 1 0 0 0 0
+0 0 1 0 0 0 0 0 0 0
+0 0 1 0 0 1 0 0 0 0
+John-1A Steve-1F Steve-1J Steve-2A Daniel-2J Sebastian-3C Kevin-4C Aden-4J
+AA345 Airbus-A380 Seoul Tokyo 05 30 2023 07 30 00 Frank Henri Lia Raja Mason 4 Scheduled 6 10
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0
+
+DU231 Boeing-777 Kuala-Lumpur Beijing 03 08 2023 00 30 00 Zaharie Fariq Ifan Stacey Teodore 5 Canceled 4 5
+1 0 0 0 0
+1 1 0 0 0
+1 1 0 0 0
+1 1 0 0 0
+Carmen-1A Jordan-2A Anaya-3A James-4A Alysha-2B Salazar-3B Emilia-4B

@@ -16,6 +16,7 @@
     using std::cerr;
     using std::endl;
     using std::flush;
+    using std::strcmp;
     using std::setw;
     using std::setfill;
     using std::mktime;
@@ -36,7 +37,7 @@
         char to[50];
         char state[10];
         tm dateTime;
-        int duration;
+        int hours;
         PlaneSeats* seats;
 
         /*
@@ -48,21 +49,24 @@
             ==> Public Methods <===
         */
         public:
-            Flight(char*, char*, char*, char*, tm, char*, char*, char*, char*, char*, int, char*, bool**, int, int);
+            Flight(char*, char*, char*, char*, tm, char*, char*, char*, char*, char*, int, char*, bool**, int, int, User**);
             ~Flight();
             void printLess();
             void printFull();
             bool isInactive();
             void mod();
+            PlaneSeats* getSeats();
             char* getId();
             char* getModel();
             char* getFrom();
             char* getTo();
-            char* getDateTime();
-            char* getAircrew();
-            int getDuration();
+            void getDateTime(char *);
+            void getAircrew(char *);
+            int getHours();
             char* getState();
             void setDateTime(char*);
             void setAircrew(char*, int);
+            void setState(char*);
+            bool strCompare(char*, char*);
     };
 #endif

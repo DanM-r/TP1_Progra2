@@ -8,17 +8,23 @@ Menu::Menu() {
 
     do {
         cout << endl;
-        cout << "===>> Flight Management and Search System <<===" << endl;
-        cout << "0: Show active flights" << endl;
-        cout << "1: Inspect an active flight"<< endl;
-        cout << "2: Modify an active flight"<< endl;
-        cout << "3: Inspect available seats in a flight"<< endl;
-        cout << "4: Check-in a flight"<< endl;
-        cout << "5: Save Data"<< endl;
-        cout << "6: Exit System"<< endl;
-        cout << "> Select an option: " << endl;
+        cout << left;
+        cout << setfill('-');
+        cout << setw(1) << "+" << setw(50) << "-" << setw(1) << "+" << endl;
+        cout << setfill(' ');
+        cout << setw(1) << "|" << setw(50) << "      Airline Management and Search System      " << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 0. Show all flights" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 1. Show specific flight" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 2. Modify a flight" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 3. See available seats of a flight" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 4. Check-in a flight" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 5. Save and refresh" << setw(1) << "|" << endl;
+        cout << setw(1) << "|" << setw(50) << " 6. Exit" << setw(1) << "|" << endl;
+        cout << setfill('-');
+        cout << setw(1) << "+" << setw(50) << "-" << setw(1) << "+" << endl;
+        cout << setfill(' ');
+        cout << "> Select an option: " << flush;
         cin >> option;
-        cout << endl;
 
         switch (option) {
             case 0:
@@ -53,6 +59,8 @@ Menu::Menu() {
                 // ==> Save Data
                 cout << "> Saving Data..." << endl;
                 this->saveData();
+                cout << "> Cleaning..." << endl;
+                this->cleanList();
                 break;
             case 6:
                 // ==> Exit
@@ -77,7 +85,7 @@ void Menu::readData() {
     ifstream fileRead("./Data/active_flights.txt");
 
     if (fileRead.fail()) {
-        cerr << "> ERROR: " << endl;
+        cerr << "> ERROR: the file was not found." << endl;
     } else {
         cout << "> Reading data..." << endl;
         fileRead >> this->num_flights;
@@ -89,6 +97,7 @@ void Menu::readData() {
         char* tok = nullptr;
         char* info[19];
         bool** seats = nullptr;
+        User** users = nullptr;
 
         fileRead.ignore(150,'\n');
         for (int i = 0; i < this->num_flights; i++) {
@@ -107,12 +116,12 @@ void Menu::readData() {
                     }
                 }
 
-                dateTime.tm_mon = atoi(info[4]);
-                dateTime.tm_mday = atoi(info[5]) - 1;
+                dateTime.tm_mon = atoi(info[4]) - 1;
+                dateTime.tm_mday = atoi(info[5]);
                 dateTime.tm_year = atoi(info[6]) - 1900;
-                dateTime.tm_hour = atoi(info[7]);
-                dateTime.tm_min = atoi(info[8]);
                 dateTime.tm_sec = atoi(info[9]);
+                dateTime.tm_min = atoi(info[8]);
+                dateTime.tm_hour =  atoi(info[7]);
                 
                 seats = new bool*[atoi(info[17])];
                 for (int j = 0; j < atoi(info[17]); j++) {
@@ -128,7 +137,25 @@ void Menu::readData() {
                         }
                     }
                 }
-                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, info[10], info[11], info[12], info[13], info[14], atoi(info[15]), info[16], seats, atoi(info[17]), atoi(info[18]));
+
+                users = new User*[atoi(info[17])*atoi(info[18])];
+                fileRead.getline(seats_str, 100);
+                tok = strtok(seats_str, " -");
+                for (int j = 0; j < atoi(info[17])*atoi(info[18]); j++) {
+                    if (tok != nullptr) {
+                        char name[20];
+                        char seat[3];
+                        strcpy(name, tok);
+                        tok = strtok(nullptr, " -");
+                        strcpy(seat, tok);
+                        users[j] = new User(name, seat);
+                        tok = strtok(nullptr, " -");
+                    } else {
+                        users[j] = nullptr;
+                    }
+                }
+
+                this->list[i] = new Flight(info[0], info[1], info[2], info[3], dateTime, info[10], info[11], info[12], info[13], info[14], atoi(info[15]), info[16], seats, atoi(info[17]), atoi(info[18]), users);
             }
         }
     }
@@ -137,8 +164,8 @@ void Menu::readData() {
 }
 
 void Menu::saveData() {
-    ofstream writeActiveFlights("../Data/active_flights.txt");
-    ofstream writeInactiveFlights("../Data/inactive_flights.txt");
+    ofstream writeActiveFlights("./Data/active_flights.txt");
+    ofstream writeInactiveFlights("./Data/inactive_flights.txt", ios::app);
     int num_active_flights = 0;
     
     for (int i = 0; i < this->num_flights; i++) {
@@ -149,20 +176,54 @@ void Menu::saveData() {
         }
     }
 
-    writeActiveFlights << num_active_flights;
+    writeActiveFlights << num_active_flights << endl;
     Flight* selected = nullptr;
     for (int i = 0; i < this->num_flights; i++) {
+
         selected = this->list[i];
+        char dateTime[50];
+        selected->getDateTime(dateTime);
+        char aircrew[100];
+        selected->getAircrew(aircrew);
+
         if (selected->isInactive()) {
-            writeInactiveFlights << selected->getId() << " "  << selected->getModel() << " "  << selected->getFrom() << " " << selected->getTo() << " " << selected->getDateTime() << " "  << selected->getAircrew() << " "  << selected->getDuration() << endl;
+
+            writeInactiveFlights << selected->getId() << " "  << selected->getModel() << " "  << selected->getFrom() << " " << selected->getTo() << " " << dateTime << " "  << aircrew << " "  << selected->getHours() << endl;
+        
         } else {
-            bool** seats = selected->getSeats();
-            writeActiveFlights << selected->getId() << " " << selected->getModel() << " " << selected->getFrom() << " " << selected->getTo() << " " << selected->getDateTime() << " " << selected->getAircrew() << " " << selected->getDuration() << " "  << selected->getState() << " "  << selected->getRows() << selected->getCollumns()<< " " << endl;
-            for (int j = 0; j < selected->getRows(); j++) {
+
+            PlaneSeats* planeseats = selected->getSeats();
+            bool** seats = planeseats->getSeats();
+            User** users = planeseats->getUsers();
+            
+
+            writeActiveFlights << selected->getId() << " " << selected->getModel() << " " << selected->getFrom() << " " << selected->getTo() << " " << dateTime << " " << aircrew << " " << selected->getHours() << " "  << selected->getState() << " "  << planeseats->getRows() << " " << planeseats->getCollumns()<< " " << endl;
+
+            for (int j = 0; j < planeseats->getRows(); j++) {
+
                 writeActiveFlights << seats[j][0];
-                for (int k = 1; k < selected->getCollumns(); k++) {
+
+                for (int k = 1; k < planeseats->getCollumns(); k++) {
+
                     writeActiveFlights << " " << seats[j][k];
+
                 }
+
+                writeActiveFlights << endl;
+            }
+
+            if (  planeseats->isEmpty() == false  ) {
+
+                int i = 1;
+                writeActiveFlights << users[0]->getName() << "-" << users[0]->getSeat();
+
+                while (users[i] != nullptr) {
+
+                    writeActiveFlights << " " << users[i]->getName() << "-" << users[i]->getSeat();
+                    i++;
+
+                }
+
                 writeActiveFlights << endl;
             }
         }
@@ -172,12 +233,56 @@ void Menu::saveData() {
     writeInactiveFlights.close();
 }
 
+void Menu::cleanList() {
+
+    Flight** new_list;
+    int num_active_flights = 0;
+
+    for (int i = 0; i < this->num_flights; i++) {
+
+        if (  this->list[i]->isInactive()  ) {
+
+            num_active_flights++;
+
+        }
+    }
+
+    new_list = new Flight*[num_active_flights];
+
+    int j = 0;
+    for (int i = 0; i < this->num_flights; i++) {
+
+        if (  this->list[i]->isInactive() ) {
+
+            delete this->list[i];
+            this->list[i] = nullptr;
+
+        } else {
+            
+            new_list[j] = this->list[i];
+            j++;
+
+        }
+    }
+
+    delete [] this->list;
+    this->list = new_list;
+    this->num_flights = num_active_flights;
+
+}
+
 void Menu::printAll() {
+    cout << endl;
     cout << left;
-    cout << "\n\n" << setw(10) << "ID" << setw(20) << "Model" << setw(20) << "From" << setw(20) << "To" << setw(20) << "Date/time" << setw(20) << "State" << endl;
+    cout << setfill('-');
+    cout << setw(1) << "+" << setw(121) << "-" << setw(1) << "+" << endl;
+    cout << setfill(' ');
+    cout << setw(1) << "| " << setw(10) << "ID" << setw(1) << "| " << setw(20) << "Model" << setw(1) << "| " << setw(20) << "From" << setw(1) << "| " << setw(20) << "To" << setw(1) << "| " << setw(20) << "Date/time" << setw(1) << "| " << setw(20) << "State" << setw(1) << "|" << endl;
     for (int i = 0; i < this->num_flights; i++) {
         this->list[i]->printLess();
     }
+    cout << setfill('-');
+    cout << setw(1) << "+" << setw(121) << "-" << setw(1) << "+" << endl;
 }
 
 int Menu::fnd(char* id) {
@@ -232,7 +337,8 @@ bool Menu::checkSeats(char* id) {
         cout << "> Flight cannot be located" << endl;
         return false;
     } else {
-        this->list[index]->printSeats();
+        PlaneSeats* seats = this->list[index]->getSeats();
+        seats->printSeats();
         return true;
     }
 }
@@ -243,7 +349,11 @@ bool Menu::checkIn(char* id) {
         cout << "> Unable to check-in, flight cannot be located." << endl;
         return false;
     } else {
-        this->list[index]->reserveSeats();
+        char name[20];
+        cout << "> Enter passanger name: " << flush;
+        cin >> name;
+        PlaneSeats* seats = this->list[index]->getSeats();
+        seats->reserveSeats(name);
         return true;
     }
 }
