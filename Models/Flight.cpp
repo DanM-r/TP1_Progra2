@@ -1,21 +1,21 @@
 #include "../Headers/Flight.h"
 
 Flight::Flight(char* id, char* model, char* from, char* to, tm dateTime, char* pilot, char* copilot, char* attend1, char* attend2, char* attend3, int hours, char* state, bool** seats, int rows, int collumns, User** users) {
-    strcpy(this->id, id);
-    strcpy(this->model, model);
-    strcpy(this->from, from);
-    strcpy(this->to, to);
-    strcpy(this->state, state);
+    csm.copy(this->id, id);
+    csm.copy(this->model, model);
+    csm.copy(this->from, from);
+    csm.copy(this->to, to);
+    csm.copy(this->state, state);
     aircrew[0] = new char[sizeof(pilot)/sizeof(pilot[0])];
-    strcpy(this->aircrew[0], pilot);
+    csm.copy(this->aircrew[0], pilot);
     aircrew[1] = new char[sizeof(copilot)/sizeof(copilot[1])];
-    strcpy(this->aircrew[1], copilot);
+    csm.copy(this->aircrew[1], copilot);
     aircrew[2] = new char[sizeof(attend1)/sizeof(attend1[2])];
-    strcpy(this->aircrew[2], attend1);
+    csm.copy(this->aircrew[2], attend1);
     aircrew[3] = new char[sizeof(attend2)/sizeof(attend2[3])];
-    strcpy(this->aircrew[3], attend2);
+    csm.copy(this->aircrew[3], attend2);
     aircrew[4] = new char[sizeof(attend3)/sizeof(attend3[4])];
-    strcpy(this->aircrew[4], attend3);
+    csm.copy(this->aircrew[4], attend3);
     this->dateTime = dateTime;
     this->hours = hours;
     this->seats = new PlaneSeats(rows, collumns, seats, users);
@@ -97,15 +97,15 @@ void Flight::getDateTime(char* dateTime) {
 }
 
 void Flight::getAircrew(char* aircrew) {
-    strcpy(aircrew, this->aircrew[0]);
-    strcat(aircrew, " ");
-    strcat(aircrew, this->aircrew[1]);
-    strcat(aircrew, " ");
-    strcat(aircrew, this->aircrew[2]);
-    strcat(aircrew, " ");
-    strcat(aircrew, this->aircrew[3]);
-    strcat(aircrew, " ");
-    strcat(aircrew, this->aircrew[4]);
+    csm.copy(aircrew, this->aircrew[0]);
+    csm.concat(aircrew, " ");
+    csm.concat(aircrew, this->aircrew[1]);
+    csm.concat(aircrew, " ");
+    csm.concat(aircrew, this->aircrew[2]);
+    csm.concat(aircrew, " ");
+    csm.concat(aircrew, this->aircrew[3]);
+    csm.concat(aircrew, " ");
+    csm.concat(aircrew, this->aircrew[4]);
 }
 
 int Flight::getHours() {
@@ -151,19 +151,19 @@ void Flight::mod() {
             this->setDateTime(new_data);
             break;
         case 3:
-            strcpy(aircrew[0], new_data);
+            csm.copy(aircrew[0], new_data);
             break;
         case 4:
-            strcpy(aircrew[1], new_data);
+            csm.copy(aircrew[1], new_data);
             break;
         case 5:
-            strcpy(aircrew[2], new_data);
+            csm.copy(aircrew[2], new_data);
             break;
         case 6:
-            strcpy(aircrew[3], new_data);
+            csm.copy(aircrew[3], new_data);
             break;
         case 7:
-            strcpy(aircrew[4], new_data);
+            csm.copy(aircrew[4], new_data);
             break;
         default:
             cerr << "> ERROR: that option is not allowed." << endl;
@@ -176,14 +176,14 @@ void Flight::setDateTime(char* newDateTime) {
     tm new_dateTime;
     int dateTime[2];
     char* tok = nullptr;
-    tok = strtok(newDateTime, ":");
+    tok = csm.tok(newDateTime, ":");
 
     for (int i = 0; i < 2; i++) {
 
         if (tok != nullptr) {
 
             dateTime[i] = atoi(tok);
-            tok = strtok(nullptr, ":");
+            tok = csm.tok(nullptr, ":");
         }
     }
 
@@ -194,7 +194,7 @@ void Flight::setDateTime(char* newDateTime) {
 
         cerr << "> ERROR: cannot assign a time earlier than the set original value" << endl;
 
-    } else if (  (strcmp(this->state, "Landed\0\0\0") == 0)  ||  (strcmp(this->state, "Canceled\0") == 0)  ) {
+    } else if (  (csm.compare(this->state, "Landed\0\0\0") == 0)  ||  (csm.compare(this->state, "Canceled\0") == 0)  ) {
 
         cerr << "> ERROR: cannot assign a time when the flight state is Canceled or Landed" << endl;
 
@@ -217,27 +217,27 @@ void Flight::setAircrew(char* newAircrew, int opt) {
 
 void Flight::setState(char* new_state) {
 
-    if (  strcmp(this->state, "Landed\0\0\0") == 0  ) {
+    if (  csm.compare(this->state, "Landed\0\0\0") == 0  ) {
 
         cerr << "> ERROR: a landed flight cannot be set up to any other state" << endl;
 
-    } else if (  strcmp(this->state, "Canceled\0") == 0  ) {
+    } else if (  csm.compare(this->state, "Canceled\0") == 0  ) {
 
         cerr << "> ERROR: a canceled flight cannot be set up to any other state" << endl;
 
-    } else if (  strcmp(this->state, "Onair\0\0\0\0") == 0 && !(strcmp(new_state, "Landed") == 0) ) {
+    } else if (  csm.compare(this->state, "Onair\0\0\0\0") == 0 && !(csm.compare(new_state, "Landed") == 0) ) {
 
         cerr << "> ERROR: a flight on air cannot be set up to any other state that's not landed" << endl;
     
-    } else if (  (strcmp(new_state, "Late\0\0\0\0") == 0) && (strcmp(this->state, "Early\0\0\0\0") == 0) || (strcmp(this->state, "Early\0\0\0\0") == 0) && (strcmp(this->state, "Late\0\0\0\0") == 0)  ) {
+    } else if (  (csm.compare(new_state, "Late\0\0\0\0") == 0) && (csm.compare(this->state, "Early\0\0\0\0") == 0) || (csm.compare(this->state, "Early\0\0\0\0") == 0) && (csm.compare(this->state, "Late\0\0\0\0") == 0)  ) {
 
         cerr << "> ERROR: a late/early flight cannot be set up to their opposite" << endl;
     
     } else {
 
-        if (  (strcmp(new_state, "Scheduled") == 0) || (strcmp(new_state, "Ontime\0\0\0") == 0) || (strcmp(new_state, "Early\0\0\0\0") == 0) || (strcmp(new_state, "Late\0\0\0\0\0") == 0) || (strcmp(new_state, "Canceled\0") == 0) || (strcmp(new_state, "Landed\0\0\0") == 0) || (strcmp(new_state, "Onair\0\0\0\0") == 0)  ) {
+        if (  (csm.compare(new_state, "Scheduled") == 0) || (csm.compare(new_state, "Ontime\0\0\0") == 0) || (csm.compare(new_state, "Early\0\0\0\0") == 0) || (csm.compare(new_state, "Late\0\0\0\0\0") == 0) || (csm.compare(new_state, "Canceled\0") == 0) || (csm.compare(new_state, "Landed\0\0\0") == 0) || (csm.compare(new_state, "Onair\0\0\0\0") == 0)  ) {
 
-            strcpy(this->state, new_state);
+            csm.copy(this->state, new_state);
             cout << "> State changed succesfully" << endl;
 
         } else {

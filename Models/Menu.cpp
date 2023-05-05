@@ -105,12 +105,12 @@ void Menu::readData() {
                 break;
             } else {
                 fileRead.getline(line_str, 150);
-                tok = strtok(line_str, " ");
+                tok = csm.tok(line_str, " ");
 
                 for (int j = 0; j < 19; j++) {
                     if (tok != nullptr) {
                         info[j] = tok;
-                        tok = strtok(nullptr, " ");
+                        tok = csm.tok(nullptr, " ");
                     } else {
                         break;
                     }
@@ -127,11 +127,11 @@ void Menu::readData() {
                 for (int j = 0; j < atoi(info[17]); j++) {
                     seats[j] = new bool[atoi(info[18])];
                     fileRead.getline(seats_str, 100);
-                    tok = strtok(seats_str, " ");
+                    tok = csm.tok(seats_str, " ");
                     for (int k = 0; k < atoi(info[18]); k++) {
                         if (tok != nullptr) {
                             seats[j][k] = this->atool(tok);
-                            tok = strtok(nullptr, " ");
+                            tok = csm.tok(nullptr, " ");
                         } else {
                             break;
                         }
@@ -140,16 +140,16 @@ void Menu::readData() {
 
                 users = new User*[atoi(info[17])*atoi(info[18])];
                 fileRead.getline(seats_str, 100);
-                tok = strtok(seats_str, " -");
+                tok = csm.tok(seats_str, " -");
                 for (int j = 0; j < atoi(info[17])*atoi(info[18]); j++) {
                     if (tok != nullptr) {
                         char name[20];
                         char seat[3];
-                        strcpy(name, tok);
-                        tok = strtok(nullptr, " -");
-                        strcpy(seat, tok);
+                        csm.copy(name, tok);
+                        tok = csm.tok(nullptr, " -");
+                        csm.copy(seat, tok);
                         users[j] = new User(name, seat);
-                        tok = strtok(nullptr, " -");
+                        tok = csm.tok(nullptr, " -");
                     } else {
                         users[j] = nullptr;
                     }
@@ -345,8 +345,8 @@ bool Menu::checkSeats(char* id) {
 
 bool Menu::checkIn(char* id) {
     int index = this->fnd(id);
-    if (index == -1) {
-        cout << "> Unable to check-in, flight cannot be located." << endl;
+    if (  index == -1,  csm.compare(this->list[index]->getState(), "Canceled"), csm.compare(this->list[index]->getState(), "Landed")  ) {
+        cout << "> Unable to check-in, the flight is unavailable or is canceled." << endl;
         return false;
     } else {
         char name[20];

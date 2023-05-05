@@ -1,0 +1,4 @@
+DM160 Boeing-737 Paris Singapore 02 05 2023 16 30 00 Daniel Sebastian Kevin Mauricio Natalia 9
+DU231 Boeing-777 Kuala-Lumpur Beijing 03 08 2023 00 30 00 Zaharie Fariq Ifan Stacey Teodore 5
+DM160 Boeing-737 Paris Singapore 02 05 2023 16 30 00 Daniel Sebastian Kevin Mauricio Natalia 9
+DU231 Boeing-777 Kuala-Lumpur Beijing 03 08 2023 00 30 00 Zaharie Fariq Ifan Stacey Teodore 5

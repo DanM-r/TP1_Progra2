@@ -4,6 +4,7 @@
     #include <ctime>
     #include <iostream>
     #include <iomanip>
+    #include "CstringM.h"
 
     // ===> Files <===
     #include "../Headers/PlaneSeats.h"
@@ -15,7 +16,6 @@
     using std::cerr;
     using std::endl;
     using std::flush;
-    //using std::strcmp;
     using std::setw;
     using std::setfill;
     using std::mktime;
@@ -29,6 +29,7 @@
         /*
             ===> Atributes <===
         */
+        CstringM csm = CstringM();
         char id[6];
         char model[50];
         char* aircrew[5];

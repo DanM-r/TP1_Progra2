@@ -5,6 +5,7 @@
     #include <ctime>
     #include <iostream>
     #include <iomanip>
+    #include "CstringM.h"
 
     // ===> Files <===
 
@@ -18,13 +19,12 @@
     using std::setfill;
     using std::setw;
     using std::tm;
-    //using std::strtok;
-    //using std::strcpy;
 
     class User {
         /*
             ===> Atributes <===
         */
+        CstringM csm = CstringM();
         char name[50];
         char seat[3];
 

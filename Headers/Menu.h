@@ -10,6 +10,7 @@
     #include "Flight.h"
     #include "PlaneSeats.h"
     #include "User.h"
+    #include "CstringM.h"
 
     // ===> Using From Libraries <===
     using std::ofstream;
@@ -24,12 +25,12 @@
     using std::setfill;
     using std::setw;
     using std::tm;
-    //using std::strtok; 
 
     class Menu {
         /*
             ===> Atributes <===
         */
+        CstringM csm = CstringM();
         Flight** list;
         int num_flights;
 

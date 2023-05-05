@@ -8,6 +8,7 @@
 
     // ===> Files <===
     #include "../Headers/User.h"
+    #include "CstringM.h"
 
     // ===> Using From Libraries <===
     using std::cout;
@@ -19,12 +20,12 @@
     using std::setfill;
     using std::setw;
     using std::tm;
-    //using std::strtok; 
 
     class PlaneSeats {
         /*
             ===> Atributes <===
         */
+        CstringM csm = CstringM();
         int rows;
         int collumns;
         bool** seats;
