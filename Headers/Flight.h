@@ -2,7 +2,6 @@
 #define FLIGHT_H
     // ===> Libraries <===
     #include <ctime>
-    #include <cstring>
     #include <iostream>
     #include <iomanip>
 
@@ -16,7 +15,7 @@
     using std::cerr;
     using std::endl;
     using std::flush;
-    using std::strcmp;
+    //using std::strcmp;
     using std::setw;
     using std::setfill;
     using std::mktime;
@@ -67,6 +66,11 @@
             void setDateTime(char*);
             void setAircrew(char*, int);
             void setState(char*);
-            bool strCompare(char*, char*);
+
+            // ._.
+            int compare();
+            void copy();
+            void concat();
+            char* tokenize();
     };
 #endif

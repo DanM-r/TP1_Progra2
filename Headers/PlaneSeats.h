@@ -2,7 +2,6 @@
 #define PLANESEATS_H
     // ===> Libraries <===
     #include <fstream>
-    #include <cstring>
     #include <ctime>
     #include <iostream>
     #include <iomanip>
@@ -20,7 +19,7 @@
     using std::setfill;
     using std::setw;
     using std::tm;
-    using std::strtok; 
+    //using std::strtok; 
 
     class PlaneSeats {
         /*
